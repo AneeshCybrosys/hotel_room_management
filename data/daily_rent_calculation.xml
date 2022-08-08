@@ -1,0 +1,14 @@
+<odoo>
+    <data noupdate="1">
+        <record id="auto_rent_calculation" model="ir.cron">
+            <field name="name">Auto Rent Calculation</field>
+            <field name="model_id" ref="model_hotel_payment"/>
+            <field name="type">ir.actions.server</field>
+            <field name="state">code</field>
+            <field name="code">model.rent_calculation()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+        </record>
+    </data>
+</odoo>

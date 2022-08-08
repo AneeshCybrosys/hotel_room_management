@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_hotel_accommodation_list" model="ir.ui.view">
+            <field name="name">hotel.accommodation.list</field>
+            <field name="model">hotel.accommodation</field>
+            <field name="arch" type="xml">
+                <tree decoration-success="state=='paid'"
+                      decoration-warning="expected_date == context_today().strftime('%Y-%m-%d') and state == 'check_in'"
+                      decoration-danger="expected_date == context_today().strftime('%Y-%m-%d') and state != 'check_out'">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="state"/>
+                    <field name="room_id"/>
+                    <field name="expected_date"/>
+                    <field name="bed_type" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_hotel_accommodation_form" model="ir.ui.view">
+            <field name="name">hotel.accommodation.form</field>
+            <field name="model">hotel.accommodation</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="check_in_btn_action" type="object" class="oe_highlight" string="Check-In"
+                                attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <button name="check_out_btn_action" type="object" class="oe_highlight" string="Check-Out"
+                                attrs="{'invisible': [('state','!=','check_in')]}"/>
+                        <button name="cancel_btn_action" type="object" string="Cancel"
+                                attrs="{'invisible': [('state','!=','draft')]}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" attrs="{'invisible': [('state','not in',('check_out','paid'))]}">
+                            <button class=" oe_stat_button" name="button_invoice" string="Invoice" type="object"
+                                    icon="fa-money">
+                            </button>
+                        </div>
+                        <widget name="web_ribbon" title="Paid"
+                                attrs="{'invisible': [('paid', '==', False)]}"/>
+                        <group>
+                            <group>
+                                <h1>
+                                    <field name="name"/>
+                                </h1>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="partner_id" widget="res_partner_many2one" context="{'show_address': 1}"
+                                       options="{'always_reload': True}"/>
+                                <field name="room_id" widget="selection" domain="[('available','=',True)]"/>
+                                <field name="bed_type" widget="selection"/>
+                                <field name="facility_ids" widget="many2many_tags"
+                                       options="{'no_create_edit': True,'no_create': True}"/>
+                            </group>
+                            <group>
+                                <field name="state"/>
+                                <field name="paid"/>
+                                <field name="no_of_guest"/>
+                                <field name="check_in_date"/>
+                                <field name="expected_days"
+                                       attrs="{'invisible': [('state','not in',('draft','check_in'))]}"/>
+                                <field name="check_out_date"/>
+                                <field name="expected_date"
+                                       attrs="{'invisible': [('state','not in',('draft','check_in'))]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Guest information">
+                                <field name="guest_ids">
+                                    <tree editable="top">
+                                        <field name="name"/>
+                                        <field name="guest_gender"/>
+                                        <field name="age"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Payments">
+                                <field name="payment_ids">
+                                    <tree editable="top">
+                                        <field name="description"/>
+                                        <field name="quantity"/>
+                                        <field name="uom_id" class="oe_inline oe_no_button"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="unit_price" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="subtotal" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group class="oe_subtotal_footer oe_right">
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="total" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hotel_accommodation_search" model="ir.ui.view">
+            <field name="name">hotel.accommodation.search</field>
+            <field name="model">hotel.accommodation</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="room_id"/>
+                    <field name="partner_id"/>
+                    <filter string="Single Bed" name="bed_type" domain="[('room_id.bed', '=', 'single')]"/>
+                    <filter string="Double Bed" name="bed_type" domain="[('room_id.bed', '=', 'double')]"/>
+                    <filter string="Check-In" name="check_in" domain="[('state', '=', 'check_in')]"/>
+                    <filter name="check_outs_today" string="Checkouts Today"
+                            domain="[('expected_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter name="check_outs_tomorrow" string="Checkouts Tomorrow"
+                            domain="[('expected_date', '=', (context_today()+datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+                    <!-- Group by -->
+                    <filter string="Rooms" name="rooms" context="{'group_by':'room_id'}"/>
+                    <filter string="Bed Type" name="type" context="{'group_by':'bed_type'}"/>
+                    <filter string="State" name="state" context="{'group_by':'state'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_hotel_accommodation" model="ir.actions.act_window">
+            <field name="name">Accommodation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.accommodation</field>
+            <field name="view_mode">tree,search,form,kanban</field>
+            <field name="search_view_id" ref="view_hotel_accommodation_search"/>
+            <field name="domain">[('state','!=', 'cancel')]</field>
+            <field name="context">{'search_default_check_outs_today': 1}</field>
+        </record>
+    </data>
+</odoo>

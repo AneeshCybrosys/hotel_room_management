@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hotel_management_report" model="ir.ui.view">
+        <field name="model">hotel.management.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="from_date"/>
+                        <field name="to_date"/>
+                        <field name="guest"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="print_pdf"
+                            class="oe_highlight"
+                            string="Print Pdf" type="object"/>
+                    <button name="print_xlsx"
+                            class="oe_highlight"
+                            string="Print xlsx" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_hotel_management_report">
+        <field name="name">Hotel Management Report</field>
+        <field name="res_model">hotel.management.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_hotel_management_report_pdf" model="ir.actions.report">
+        <field name="name">Hotel Management Report</field>
+        <field name="model">hotel.management.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hotel_room_management.report_hotel_room_management</field>
+        <field name="report_file">hotel_room_management.report_hotel_room_management</field>
+    </record>
+
+<!--        <record id="action_hotel_management_report_xlsx" model="ir.actions.report">-->
+<!--            <field name="name">Hotel Management Report</field>-->
+<!--            <field name="model">hotel.management.report</field>-->
+<!--            <field name="report_type">xlsx</field>-->
+<!--            <field name="report_name">hotel_room_management.report_hotel_room_management</field>-->
+<!--            <field name="report_file">hotel_room_management.report_hotel_room_management</field>-->
+<!--        </record>-->
+</odoo>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_hotel_room_list" model="ir.ui.view">
+            <field name="name">hotel.room.list</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="bed"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="rent" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="facility_ids" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_hotel_room_form" model="ir.ui.view">
+            <field name="name">hotel.room.form</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <h1>
+                                    <field name="name" placeholder="Room Number"/>
+                                </h1>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="bed"/>
+                                <field name="available_beds" attrs="{'invisible': [('bed','!=','dormitory')]}"/>
+                                <field name="facility_ids" widget="many2many_tags"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="rent" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="available"/>
+                                <field name="food_order"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hotel_room_search" model="ir.ui.view">
+            <field name="name">room search</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter name="rooms_available" string="Available Rooms" domain="[('available', '=',True)]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_hotel_room" model="ir.actions.act_window">
+            <field name="name">Room</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.room</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_hotel_room_search"/>
+        </record>
+    </data>
+</odoo>

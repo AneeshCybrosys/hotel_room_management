@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem name="Hotel Room Management" id="menu_hotel_room_management_root"/>
+
+    <menuitem name="Reception" id="menu_hotel_reception" parent="menu_hotel_room_management_root" sequence="0"/>
+    <menuitem name="Accommodation" id="menu_hotel_accommodation" parent="menu_hotel_reception"
+              action="action_hotel_accommodation"/>
+
+    <menuitem name="Food Orders" id="menu_hotel_food_order" parent="menu_hotel_room_management_root" sequence="1"
+              action="action_food_order"/>
+
+    <menuitem name="Reporting" id="menu_hotel_reporting"
+              parent="menu_hotel_room_management_root" sequence="2"/>
+    <menuitem name="Hotel Management Report" id="menu_hotel_report"
+              parent="menu_hotel_reporting" action="action_hotel_management_report"/>
+
+    <menuitem name="Configuration" id="menu_hotel_configuration"
+              parent="menu_hotel_room_management_root" sequence="3"/>
+    <menuitem name="Rooms" id="menu_hotel_room" parent="menu_hotel_configuration" action="action_hotel_room"/>
+    <menuitem name="Facilities" id="menu_hotel_facility" parent="menu_hotel_configuration"
+              action="action_hotel_facility"/>
+    <menuitem name="Foods" id="menu_hotel_food" parent="menu_hotel_configuration" action="action_hotel_food"/>
+    <menuitem name="Food Categories" id="menu_hotel_food_category" parent="menu_hotel_configuration"
+              action="action_hotel_food_category"/>
+
+</odoo>

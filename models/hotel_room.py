@@ -17,5 +17,5 @@ class HotelRoom(models.Model):
     rent = fields.Float(string='Rent')
     facility_ids = fields.Many2many('hotel.facility',
                                     string="Facilities")
-    available = fields.Boolean(default=True, String='Available')
-    food_order = fields.Boolean(default=False, String='Food Order')
+    available = fields.Boolean(default=True, string='Available')
+    food_order = fields.Boolean(string='Food Order')

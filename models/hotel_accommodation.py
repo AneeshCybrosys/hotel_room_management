@@ -65,12 +65,12 @@ class HotelAccommodation(models.Model):
             rec = self.env['ir.attachment'].search(
                 [('res_id', '=', self.id), ('res_model', '=', self._name)])
             if rec:
-                self.state = 'check_in'
-                self.room_id.available = False
-                self.check_in_date = datetime.now()
-                self.name = self.env['ir.sequence'].next_by_code(
-                    'hotel.accommodation')
-                self.payment_ids = [
+                self.write({
+                    'name': self.env['ir.sequence'].next_by_code(
+                        'hotel.accommodation'),
+                    'state': 'check_in',
+                    # 'room_id.available': False,
+                    'payment_ids': [
                     (0, 0, {'product_id': self.env['product.product'].search(
                         [('id', '=', 2)]).id,
                             'description': 'Room Rent',
@@ -82,6 +82,24 @@ class HotelAccommodation(models.Model):
                             'subtotal':
                                 self.room_id.rent,
                             })]
+                })
+                # self.state = 'check_in'
+                self.room_id.available = False
+                # self.check_in_date = datetime.now()
+                # self.name = self.env['ir.sequence'].next_by_code(
+                #     'hotel.accommodation')
+                # self.payment_ids = [
+                #     (0, 0, {'product_id': self.env['product.product'].search(
+                #         [('id', '=', 2)]).id,
+                #             'description': 'Room Rent',
+                #             'quantity': 1,
+                #             'uom_id': self.env['uom.uom'].search(
+                #                 [('id', '=', 3)]).id,
+                #             'unit_price':
+                #                 self.room_id.rent,
+                #             'subtotal':
+                #                 self.room_id.rent,
+                #             })]
             else:
                 raise ValidationError('"Please provide address proof"')
         else:

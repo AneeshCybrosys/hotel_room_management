@@ -92,17 +92,14 @@ class HotelAccommodation(models.Model):
         self.room_id.available = True
         self.room_id.food_order = False
 
-        payments = self.env['hotel.payment'].search(
-            [('accommodation_id', '=', self.id)])
         order_lines = []
-        for line in payments:
+        for line in self.payment_ids:
             order_lines.append((0, 0, {
                 'product_id': line.product_id,
                 'name': line.description,
                 'quantity': line.quantity,
                 'price_unit': line.unit_price,
             }))
-
         move = self.env['account.move'].create([
             {
                 'payment_reference': self.name,

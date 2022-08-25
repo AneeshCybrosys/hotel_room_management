@@ -6,7 +6,6 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     accommodation_id = fields.Many2one('hotel.accommodation')
-
     @api.constrains('payment_state')
     def change_state(self):
         for rec in self:

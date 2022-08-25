@@ -11,7 +11,7 @@
 
     'author': "Minions 6",
 
-    'version': '15.0.1.0',
+    'version': '15.0.1.0.0',
     'depends': ['base', 'mail', 'web', 'account'],
     'data': [
         'security/hotel_room_management_security.xml',

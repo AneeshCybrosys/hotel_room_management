@@ -10,4 +10,4 @@ class AccountMove(models.Model):
     def change_state(self):
         for rec in self:
             if rec.payment_state == 'paid':
-                self.accommodation_id.state = 'paid'
+                self.accommodation_id.paid = True
